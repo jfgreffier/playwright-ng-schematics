@@ -16,7 +16,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/playwright-community/playwright-ng-schematics.git"
+    "url": "https://github.com/jfgreffier/playwright-ng-schematics.git"
   },
   "license": "Apache-2.0",
   "keywords": [
