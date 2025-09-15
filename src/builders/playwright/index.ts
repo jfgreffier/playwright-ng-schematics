@@ -62,6 +62,17 @@ async function startDevServer(
   return server;
 }
 
+export function getPackageManagerExecCommand() {
+  const env = process.env.npm_config_user_agent || '';
+  if (env.includes('yarn')) {
+    return 'yarn';
+  }
+  if (env.includes('pnpm')) {
+    return 'pnpm exec';
+  }
+  return 'npx';
+}
+
 async function startPlaywrightTest(options: JsonObject, baseURL: string) {
   // PLAYWRIGHT_TEST_BASE_URL is actually a non-documented env variable used
   // by Playwright Test.
@@ -75,12 +86,16 @@ async function startPlaywrightTest(options: JsonObject, baseURL: string) {
   }
 
   return new Promise((resolve, reject) => {
-    const childProcess = spawn('npx playwright test', buildArgs(options), {
-      cwd: process.cwd(),
-      stdio: 'inherit',
-      shell: true,
-      env,
-    });
+    const childProcess = spawn(
+      `${getPackageManagerExecCommand()} playwright test`,
+      buildArgs(options),
+      {
+        cwd: process.cwd(),
+        stdio: 'inherit',
+        shell: true,
+        env,
+      },
+    );
 
     childProcess.on('exit', (exitCode) => {
       if (exitCode !== 0) {
