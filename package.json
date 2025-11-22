@@ -1,6 +1,6 @@
 {
   "name": "playwright-ng-schematics",
-  "version": "20.0.0",
+  "version": "21.0.0",
   "description": "Playwright Angular schematics",
   "scripts": {
     "build": "tsc -p tsconfig.json",
@@ -27,13 +27,13 @@
     "testing"
   ],
   "dependencies": {
-    "@angular-devkit/architect": ">= 0.2000.0 < 0.2100.0",
-    "@angular-devkit/core": "^20.0.0",
-    "@angular-devkit/schematics": "^20.0.0"
+    "@angular-devkit/architect": ">= 0.2100.0 < 0.2200.0",
+    "@angular-devkit/core": "^21.0.0",
+    "@angular-devkit/schematics": "^21.0.0"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "@schematics/angular": "^20.0.0",
+    "@schematics/angular": "^21.0.0",
     "@types/jest": "^29.5.14",
     "@types/node": "^20.17.23",
     "cpy-cli": "^5.0.0",
@@ -43,9 +43,9 @@
     "typescript": "^5.8.3"
   },
   "peerDependencies": {
-    "@angular-devkit/architect": ">= 0.2000.0 < 0.2100.0",
-    "@angular-devkit/core": "^20.0.0",
-    "@angular-devkit/schematics": "^20.0.0"
+    "@angular-devkit/architect": ">= 0.2100.0 < 0.2200.0",
+    "@angular-devkit/core": "^21.0.0",
+    "@angular-devkit/schematics": "^21.0.0"
   },
   "builders": "./lib/builders/builders.json",
   "schematics": "./lib/schematics/collection.json",
