@@ -26,6 +26,9 @@ function buildArgs(options: JsonObject): string[] {
       if (key === 'devServerTarget') {
         return [];
       }
+      if (key === 'port') {
+        return [];
+      }
 
       // Skip objects, arrays, null, undefined (should already be validated by Angular though)
       if (
@@ -55,9 +58,11 @@ function buildArgs(options: JsonObject): string[] {
 async function startDevServer(
   context: BuilderContext,
   devServerTarget: string,
+  port: number | null,
 ): Promise<BuilderRun> {
   const target = targetFromTargetString(devServerTarget);
-  const server = await context.scheduleTarget(target, {});
+  const overrides: JsonObject = port !== null ? { port } : {};
+  const server = await context.scheduleTarget(target, overrides);
 
   return server;
 }
@@ -106,19 +111,26 @@ async function startPlaywrightTest(options: JsonObject, baseURL: string) {
   });
 }
 
+interface PlaywrightBuilderOptions extends JsonObject {
+  devServerTarget: string | null;
+  port: number | null;
+  files: string[] | null;
+}
+
 async function runE2E(
-  options: JsonObject,
+  options: PlaywrightBuilderOptions,
   context: BuilderContext,
 ): Promise<BuilderOutput> {
   let server: BuilderRun | undefined = undefined;
   let baseURL = '';
 
   try {
-    if (
-      options.devServerTarget &&
-      typeof options.devServerTarget === 'string'
-    ) {
-      server = await startDevServer(context, options.devServerTarget);
+    if (options.devServerTarget) {
+      server = await startDevServer(
+        context,
+        options.devServerTarget,
+        options.port,
+      );
       const result = await server.result;
       baseURL = result.baseUrl;
     }
