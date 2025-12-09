@@ -8,6 +8,10 @@
       "description": "Dev server target to run tests against",
       "type": "string"
     },
+    "port": {
+      "description": "Dev server port. Overrides the port defined in devServerTarget.",
+      "type": "number"
+    },
     "files": {
       "description": "Run a test file with the given file name or in the given directory. To specify multiple names, repeat this argument.",
       "type": "array",

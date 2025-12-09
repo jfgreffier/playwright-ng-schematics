@@ -19,8 +19,8 @@ describe('Playwright builder', () => {
     await architectHost.addBuilderFromPackage(join(__dirname, '../../..'));
 
     // Builder that mocks `ng run app:serve`
-    const fakeBuilder = (): BuilderOutput => {
-      return { success: true, baseUrl: 'https://example.com' };
+    const fakeBuilder = (options: { port: number | null }): BuilderOutput => {
+      return { success: true, baseUrl: `https://example.com:${options.port}` };
     };
     architectHost.addBuilder('fakeBuilder', createBuilder(fakeBuilder));
     architectHost.addTarget(targetFromTargetString('app:serve'), 'fakeBuilder');
@@ -55,6 +55,7 @@ describe('Playwright builder', () => {
       'playwright-ng-schematics:playwright',
       {
         devServerTarget: 'app:serve',
+        port: 0,
       },
     );
     await run.stop();
@@ -66,7 +67,7 @@ describe('Playwright builder', () => {
       [],
       expect.objectContaining({
         env: expect.objectContaining({
-          PLAYWRIGHT_TEST_BASE_URL: 'https://example.com',
+          PLAYWRIGHT_TEST_BASE_URL: 'https://example.com:0',
         }),
       }),
     );

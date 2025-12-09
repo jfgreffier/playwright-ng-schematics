@@ -70,6 +70,17 @@ If a `devServerTarget` option is specified, the builder will launch an Angular s
         }
 ```
 
+You can additionaly override the `port` of the dev server. It's handy when you want to run dev server and Playwright tests on different ports.
+```json title="angular.json"
+        "e2e": {
+          "builder": "playwright-ng-schematics:playwright",
+          "options": {
+            "devServerTarget": "my-app:serve",
+            "port": 0
+          }
+        }
+```
+
 You still can make use of Playwright's `baseURL` option and mix it with `PLAYWRIGHT_TEST_BASE_URL` env variable.  
 The example below shows projects using `PLAYWRIGHT_TEST_BASE_URL` (set by `devServerTarget`) or another base URL.
 
