@@ -61,7 +61,9 @@ async function startDevServer(
   port: number | null,
 ): Promise<BuilderRun> {
   const target = targetFromTargetString(devServerTarget);
-  const overrides: JsonObject = port !== null ? { port } : {};
+  const defaultServerOptions = await context.getTargetOptions(target);
+  
+  const overrides = { port: port ?? defaultServerOptions['port'] };
   const server = await context.scheduleTarget(target, overrides);
 
   return server;
