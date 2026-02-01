@@ -1,10 +1,12 @@
 import {
   url,
+  MergeStrategy,
   type Rule,
   type SchematicContext,
   type Tree,
   apply,
   chain,
+  filter,
   mergeWith,
   move,
 } from '@angular-devkit/schematics';
@@ -12,16 +14,64 @@ import {
   NodePackageInstallTask,
   RunSchematicTask,
 } from '@angular-devkit/schematics/tasks';
+import {
+  applyEdits as applyJsoncEdits,
+  modify as modifyJsonc,
+  parse as parseJsonc,
+} from 'jsonc-parser';
+
+function projectUsesTsconfigReferences(tree: Tree): boolean {
+  if (!tree.exists('tsconfig.json')) {
+    return false;
+  }
+
+  const sourceText = tree.readText('tsconfig.json');
+  const json = parseJsonc(sourceText);
+  return Array.isArray(json.references);
+}
+
+/**
+ * Filters tsconfig files based on whether the project uses references.
+ *
+ * - For projects with references: include tsconfig.e2e.json, exclude
+ * e2e/tsconfig.json.
+ * - For projects without references: exclude tsconfig.e2e.json, include
+ * e2e/tsconfig.json.
+ *
+ * Angular 20+ projects use tsconfig references by default, while Angular 19
+ * and earlier use the old structure. Official Angular schematics do not
+ * migrate existing projects to use references during updates.
+ */
+function filterTsconfigFiles(path: string, usesReferences: boolean): boolean {
+  if (usesReferences) {
+    return !path.endsWith('e2e/tsconfig.json');
+  }
+
+  return !path.endsWith('tsconfig.e2e.json');
+}
 
 export default function ngAdd(options: { installBrowsers: boolean }): Rule {
   return (tree: Tree, context: SchematicContext) => {
-    const copyFiles = mergeWith(apply(url('./files'), [move('.')]));
+    const usesTsconfigReferences = projectUsesTsconfigReferences(tree);
+    context.logger.debug(
+      `Project uses tsconfig references: ${usesTsconfigReferences}`,
+    );
+
+    const copyFiles = mergeWith(
+      apply(url('./files'), [
+        filter((path) => filterTsconfigFiles(path, usesTsconfigReferences)),
+        move('.'),
+      ]),
+      MergeStrategy.AllowCreationConflict,
+    );
+
     const rules = [
       updateAngular,
       addNpmScript,
       gitignore,
       copyFiles,
       addPlaywright,
+      ...(usesTsconfigReferences ? [handleTsconfigReferences] : []),
     ];
     if (options.installBrowsers) {
       context.addTask(new RunSchematicTask('install-browsers', {}));
@@ -140,6 +190,51 @@ async function addPlaywright(tree: Tree, context: SchematicContext) {
   context.addTask(new NodePackageInstallTask({ allowScripts: true }));
 
   return addPackageToPackageJson(tree, context, '@playwright/test', version);
+}
+
+function handleTsconfigReferences(tree: Tree, context: SchematicContext) {
+  if (!tree.exists('tsconfig.json')) {
+    return tree;
+  }
+  context.logger.debug('Adjust tsconfig.json');
+
+  const oldTsconfigPath = 'e2e/tsconfig.json';
+  if (tree.exists(oldTsconfigPath)) {
+    context.logger.info(
+      `Removing old ${oldTsconfigPath} file (migrating to tsconfig.e2e.json)`,
+    );
+    tree.delete(oldTsconfigPath);
+  }
+
+  const sourceText = tree.readText('tsconfig.json');
+  const json = parseJsonc(sourceText);
+  const referenceExists = (
+    json.references as { path?: string }[] | undefined
+  )?.some((ref) => ref.path === './tsconfig.e2e.json');
+  if (!referenceExists) {
+    const formattingOptions = {
+      eol: '\n',
+      insertSpaces: true,
+      tabSize: 2,
+    };
+    let modifiedText = sourceText;
+    if (!Array.isArray(json.references)) {
+      const edits = modifyJsonc(modifiedText, ['references'], [], {
+        formattingOptions,
+      });
+      modifiedText = applyJsoncEdits(modifiedText, edits);
+    }
+    const edits = modifyJsonc(
+      modifiedText,
+      ['references', -1],
+      { path: './tsconfig.e2e.json' },
+      { formattingOptions },
+    );
+    modifiedText = applyJsoncEdits(modifiedText, edits);
+    tree.overwrite('tsconfig.json', modifiedText);
+  }
+
+  return tree;
 }
 
 function sortObjectByKeys(

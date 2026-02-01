@@ -1,6 +1,6 @@
 {
   "formatter": {
-    "ignore": ["package.json"],
+    "ignore": ["package.json", "src/schematics/ng-add/files/tsconfig.e2e.json"],
     "indentStyle": "space"
   },
   "javascript": {
