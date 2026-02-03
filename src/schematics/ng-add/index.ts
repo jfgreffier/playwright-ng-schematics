@@ -51,6 +51,11 @@ function updateAngular(tree: Tree, context: SchematicContext) {
       },
     };
   }
+  json.cli = json.cli || {};
+  json.cli.schematicCollections = json.cli.schematicCollections || [];
+  if (!json.cli.schematicCollections.includes('playwright-ng-schematics')) {
+    json.cli.schematicCollections.push('playwright-ng-schematics');
+  }
   tree.overwrite('angular.json', JSON.stringify(json, null, 2));
 
   return tree;

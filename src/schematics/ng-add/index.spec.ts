@@ -35,6 +35,17 @@ describe('ng-add', () => {
     );
   });
 
+  it('should add "playwright-ng-schematics" to schematicCollections', async () => {
+    global.fetch = jest.fn().mockResolvedValueOnce({ json: npmResponse });
+
+    const tree = await runner.runSchematic('ng-add', {}, appTree);
+
+    const angularJSON = JSON.parse(tree.readContent('/angular.json'));
+    expect(angularJSON.cli.schematicCollections).toContain(
+      'playwright-ng-schematics',
+    );
+  });
+
   it('should add npm script', async () => {
     global.fetch = jest.fn().mockResolvedValueOnce({ json: npmResponse });
 

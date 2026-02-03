@@ -103,13 +103,20 @@ The example below shows projects using `PLAYWRIGHT_TEST_BASE_URL` (set by `devSe
 
 Create a new empty test
 ```bash
-ng generate playwright-ng-schematics:e2e "<TestName>"
+ng generate e2e "<TestName>"
 ```
 
 or with CLI prompt of the name
 ```bash
-ng generate playwright-ng-schematics:e2e
+ng generate e2e
 ```
+
+> **Note:** The simplified `ng generate e2e` command requires `playwright-ng-schematics` to be registered in your `cli.schematicCollections` in `angular.json`. This happens automatically when you run `ng add playwright-ng-schematics`.
+>
+> If the schematic collection is not registered, use the full command instead:
+> ```bash
+> ng generate playwright-ng-schematics:e2e "<TestName>"
+> ```
 
 ## Migrating from Protractor
 
