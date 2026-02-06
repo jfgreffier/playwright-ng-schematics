@@ -103,12 +103,12 @@ The example below shows projects using `PLAYWRIGHT_TEST_BASE_URL` (set by `devSe
 
 Create a new empty test
 ```bash
-ng generate playwright-ng-schematics:e2e "<TestName>"
+ng generate e2e "<TestName>"
 ```
 
 or with CLI prompt of the name
 ```bash
-ng generate playwright-ng-schematics:e2e
+ng generate e2e
 ```
 
 ## Migrating from Protractor
