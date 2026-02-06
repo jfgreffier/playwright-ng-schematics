@@ -111,13 +111,6 @@ or with CLI prompt of the name
 ng generate e2e
 ```
 
-> **Note:** The simplified `ng generate e2e` command requires `playwright-ng-schematics` to be registered in your `cli.schematicCollections` in `angular.json`. This happens automatically when you run `ng add playwright-ng-schematics`.
->
-> If the schematic collection is not registered, use the full command instead:
-> ```bash
-> ng generate playwright-ng-schematics:e2e "<TestName>"
-> ```
-
 ## Migrating from Protractor
 
 Still using Protractor ?
