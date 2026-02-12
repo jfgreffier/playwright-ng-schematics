@@ -54,7 +54,7 @@ describe('ng-add', () => {
   });
 
   it('should add "e2e" to angular', async () => {
-    global.fetch = jest.fn().mockResolvedValueOnce({ json: npmResponse });
+    global.fetch = jest.fn().mockResolvedValue({ json: npmResponse });
 
     const tree = await runner.runSchematic('ng-add', {}, appTree);
 
@@ -65,7 +65,7 @@ describe('ng-add', () => {
   });
 
   it('should add npm script', async () => {
-    global.fetch = jest.fn().mockResolvedValueOnce({ json: npmResponse });
+    global.fetch = jest.fn().mockResolvedValue({ json: npmResponse });
 
     const tree = await runner.runSchematic('ng-add', {}, appTree);
 
@@ -74,7 +74,7 @@ describe('ng-add', () => {
   });
 
   it('should update .gitignore', async () => {
-    global.fetch = jest.fn().mockResolvedValueOnce({ json: npmResponse });
+    global.fetch = jest.fn().mockResolvedValue({ json: npmResponse });
 
     const tree = await runner.runSchematic('ng-add', {}, appTree);
 
@@ -83,7 +83,7 @@ describe('ng-add', () => {
   });
 
   it('should add files and update devDependencies', async () => {
-    global.fetch = jest.fn().mockResolvedValueOnce({ json: npmResponse });
+    global.fetch = jest.fn().mockResolvedValue({ json: npmResponse });
     // Simulate Angular project without tsconfig references
     appTree.overwrite(
       '/tsconfig.json',
@@ -99,6 +99,7 @@ describe('ng-add', () => {
 
     const packageJSON = JSON.parse(tree.readContent('/package.json'));
     expect(packageJSON.devDependencies['@playwright/test']).toEqual('1.2.3');
+    expect(packageJSON.devDependencies['@types/node']).toEqual('1.2.3');
     // check that the dependency is added in the correct place
     expect(Object.keys(packageJSON.devDependencies)).toEqual(
       Object.keys(packageJSON.devDependencies).sort(),
@@ -109,7 +110,7 @@ describe('ng-add', () => {
   });
 
   it('should add files and update devDependencies and tsconfig references', async () => {
-    global.fetch = jest.fn().mockResolvedValueOnce({ json: npmResponse });
+    global.fetch = jest.fn().mockResolvedValue({ json: npmResponse });
 
     const tree = await runner.runSchematic('ng-add', {}, appTree);
 
@@ -120,6 +121,7 @@ describe('ng-add', () => {
 
     const packageJSON = JSON.parse(tree.readContent('/package.json'));
     expect(packageJSON.devDependencies['@playwright/test']).toEqual('1.2.3');
+    expect(packageJSON.devDependencies['@types/node']).toEqual('1.2.3');
     // check that the dependency is added in the correct place
     expect(Object.keys(packageJSON.devDependencies)).toEqual(
       Object.keys(packageJSON.devDependencies).sort(),
@@ -138,10 +140,11 @@ describe('ng-add', () => {
 
     const packageJSON = JSON.parse(tree.readContent('/package.json'));
     expect(packageJSON.devDependencies['@playwright/test']).toEqual('latest');
+    expect(packageJSON.devDependencies['@types/node']).toEqual('latest');
   });
 
   it('should migrate from old e2e/tsconfig.json to root tsconfig.e2e.json', async () => {
-    global.fetch = jest.fn().mockResolvedValueOnce({ json: npmResponse });
+    global.fetch = jest.fn().mockResolvedValue({ json: npmResponse });
     // Existing e2e/tsconfig.json from previous Playwright installation
     appTree.create(
       '/e2e/tsconfig.json',
@@ -166,7 +169,7 @@ describe('ng-add', () => {
   });
 
   it('should keep old-style e2e/tsconfig.json for projects without references', async () => {
-    global.fetch = jest.fn().mockResolvedValueOnce({ json: npmResponse });
+    global.fetch = jest.fn().mockResolvedValue({ json: npmResponse });
     // Simulate Angular project without tsconfig references
     appTree.overwrite(
       '/tsconfig.json',

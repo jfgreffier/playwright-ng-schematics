@@ -183,13 +183,23 @@ function addPackageToPackageJson(
 
 async function addPlaywright(tree: Tree, context: SchematicContext) {
   context.logger.debug('Updating dependencies...');
-  const version = await getLatestNpmVersion('@playwright/test');
+  const typesNodeVersion = await getLatestNpmVersion('@types/node');
+  const playwrightVersion = await getLatestNpmVersion('@playwright/test');
 
-  context.logger.info(`Adding @playwright/test ${version}`);
+  context.logger.info(`Adding @playwright/test ${playwrightVersion}`);
+  context.logger.info(`Adding @types/node ${typesNodeVersion}`);
 
   context.addTask(new NodePackageInstallTask({ allowScripts: true }));
 
-  return addPackageToPackageJson(tree, context, '@playwright/test', version);
+  return chain([
+    addPackageToPackageJson(
+      tree,
+      context,
+      '@playwright/test',
+      playwrightVersion,
+    ),
+    addPackageToPackageJson(tree, context, '@types/node', typesNodeVersion),
+  ]);
 }
 
 function handleTsconfigReferences(tree: Tree, context: SchematicContext) {
