@@ -1,3 +1,4 @@
+import type { JsonObject } from '@angular-devkit/core';
 import {
   SchematicTestRunner,
   type UnitTestTree,
@@ -41,9 +42,32 @@ describe('ng-add', () => {
     const tree = await runner.runSchematic('ng-add', {}, appTree);
 
     const angularJSON = JSON.parse(tree.readContent('/angular.json'));
-    expect(angularJSON.cli.schematicCollections).toContain(
+    expect(angularJSON.cli.schematicCollections).toStrictEqual([
+      '@schematics/angular',
       'playwright-ng-schematics',
+    ]);
+  });
+
+  it('should not overwrite existing schematicCollections', async () => {
+    global.fetch = jest.fn().mockResolvedValueOnce({ json: npmResponse });
+    const angularJson = appTree.readJson('/angular.json') as JsonObject;
+    appTree.overwrite(
+      './angular.json',
+      JSON.stringify({
+        ...angularJson,
+        cli: {
+          schematicCollections: ['@any/schematic', 'playwright-ng-schematics'],
+        },
+      }),
     );
+
+    const tree = await runner.runSchematic('ng-add', {}, appTree);
+
+    const angularJSON = JSON.parse(tree.readContent('/angular.json'));
+    expect(angularJSON.cli.schematicCollections).toStrictEqual([
+      '@any/schematic',
+      'playwright-ng-schematics',
+    ]);
   });
 
   it('should add npm script', async () => {
