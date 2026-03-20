@@ -69,15 +69,23 @@ async function startDevServer(
   return server;
 }
 
-export function getPackageManagerExecCommand() {
+export function getPackageManagerCommand() {
   const env = process.env.npm_config_user_agent || '';
   if (env.includes('yarn')) {
     return 'yarn';
   }
   if (env.includes('pnpm')) {
-    return 'pnpm exec';
+    return 'pnpm';
   }
   return 'npx';
+}
+
+function getPackageManagerExecArgs() {
+  const env = process.env.npm_config_user_agent || '';
+  if (env.includes('pnpm')) {
+    return ['exec'];
+  }
+  return [];
 }
 
 async function startPlaywrightTest(options: JsonObject, baseURL: string) {
@@ -93,16 +101,18 @@ async function startPlaywrightTest(options: JsonObject, baseURL: string) {
   }
 
   return new Promise((resolve, reject) => {
-    const childProcess = spawn(
-      `${getPackageManagerExecCommand()} playwright test`,
-      buildArgs(options),
-      {
-        cwd: process.cwd(),
-        stdio: 'inherit',
-        shell: true,
-        env,
-      },
-    );
+    const args = [
+      ...getPackageManagerExecArgs(),
+      'playwright',
+      'test',
+      ...buildArgs(options),
+    ];
+
+    const childProcess = spawn(getPackageManagerCommand(), args, {
+      cwd: process.cwd(),
+      stdio: 'inherit',
+      env,
+    });
 
     childProcess.on('exit', (exitCode) => {
       if (exitCode !== 0) {
