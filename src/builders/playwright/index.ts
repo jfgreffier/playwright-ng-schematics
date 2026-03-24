@@ -50,10 +50,6 @@ function buildArgs(options: JsonObject): string[] {
         }
         return [];
       }
-      if (typeof value === 'string') {
-        const escapedValue = value.replace(/(\s|'|")/g, '\\$1');
-        return [argument, escapedValue];
-      }
       return [argument, String(value)];
     }),
   ];
