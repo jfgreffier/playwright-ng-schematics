@@ -163,4 +163,20 @@ describe('Playwright builder', () => {
     );
     expect(output.success).toBeTruthy();
   });
+
+  it('should escape string arguments', async () => {
+    const run = await architect.scheduleBuilder(
+      'playwright-ng-schematics:playwright',
+      { g: 'has title' },
+    );
+    await run.stop();
+    const output = await run.result;
+
+    expect(spawn).toHaveBeenCalledWith(
+      'npx playwright test',
+      ['-g', 'has\\ title'],
+      expect.anything(),
+    );
+    expect(output.success).toBeTruthy();
+  });
 });
