@@ -5,6 +5,9 @@ const config: JestConfigWithTsJest = {
 
   rootDir: 'src',
   testPathIgnorePatterns: ['<rootDir>.*/files/'],
+  moduleNameMapper: {
+    '^ora$': '<rootDir>/test/ora.mock.ts',
+  },
   transform: {
     '^.+.ts$': ['ts-jest', {}],
   },
