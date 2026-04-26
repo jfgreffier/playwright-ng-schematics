@@ -19,6 +19,12 @@ function buildArgs(options: JsonObject): string[] {
   const filesArgs = (options.files as string[]) ?? [];
   options.files = null;
 
+  // project alias
+  if (options.testProject) {
+    options.project = options.testProject;
+    options.testProject = null;
+  }
+
   return [
     ...filesArgs,
     ...Object.entries(options).flatMap(([key, value]) => {

@@ -93,6 +93,10 @@
       "description": "Only run tests from the specified projects, supports '*' wildcard. Defaults to running all projects defined in the configuration file.",
       "type": "string"
     },
+    "test-project": {
+      "description": "Only run tests from the specified projects, supports '*' wildcard. Defaults to running all projects defined in the configuration file.",
+      "type": "string"
+    },
     "quiet": {
       "description": "Whether to suppress stdout and stderr from the tests.",
       "type": "boolean"

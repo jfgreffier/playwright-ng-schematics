@@ -51,6 +51,8 @@ ng e2e --files tests/todo-page/ --files tests/landing-page/
 ```
 The `-c` option is used to choose an Angular configuration. If you also want to specify a Playwright configuration, use `--config` instead.
 
+The `--project` option is used to choose an Angular project. If you want to specify a Playwright project, use `--test-project` instead.
+
 ### Start an Angular development server
 
 If a `devServerTarget` option is specified, the builder will launch an Angular server and will automatically set the `PLAYWRIGHT_TEST_BASE_URL` environment variable.
