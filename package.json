@@ -1,6 +1,6 @@
 {
   "name": "playwright-ng-schematics",
-  "version": "21.0.10",
+  "version": "21.1.0",
   "description": "Playwright Angular schematics",
   "scripts": {
     "build": "tsc -p tsconfig.json",
