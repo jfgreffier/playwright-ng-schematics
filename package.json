@@ -3,7 +3,7 @@
   "version": "21.1.0",
   "description": "Playwright Angular schematics",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.build.json",
     "postbuild": "cpy \"src/**/*.json\" \"src/**/files/**/*\" lib",
     "lint": "biome ci",
     "lint:fix": "biome check --write",
