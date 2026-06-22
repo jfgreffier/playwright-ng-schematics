@@ -27,7 +27,7 @@ describe('Playwright builder', () => {
     architectHost.addTarget(targetFromTargetString('app:serve'), 'fakeBuilder');
 
     (spawn as jest.Mock).mockReturnValue({
-      on: jest.fn((event, callback) => callback(0)),
+      on: jest.fn((_event, callback) => callback(0)),
     });
   });
 
@@ -76,7 +76,7 @@ describe('Playwright builder', () => {
 
   it('should fail on error', async () => {
     (spawn as jest.Mock).mockReturnValue({
-      on: jest.fn((event, callback) => callback(-3)),
+      on: jest.fn((_event, callback) => callback(-3)),
     });
 
     const run = await architect.scheduleBuilder(

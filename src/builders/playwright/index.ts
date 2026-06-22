@@ -145,7 +145,7 @@ async function runE2E(
 
     await startPlaywrightTest(options, baseURL);
     return { success: true };
-  } catch (error) {
+  } catch (_error) {
     return { success: false };
   } finally {
     if (server) {

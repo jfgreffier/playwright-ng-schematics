@@ -106,7 +106,7 @@ async function getLatestNpmVersion(packageName: string) {
     const responseObject = await response.json();
     const version = responseObject['dist-tags'].latest ?? 'latest';
     return version;
-  } catch (error) {
+  } catch (_error) {
     return 'latest';
   }
 }
