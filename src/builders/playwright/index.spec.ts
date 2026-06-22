@@ -1,5 +1,4 @@
 import { spawn } from 'node:child_process';
-import { join } from 'node:path';
 import { Architect } from '@angular-devkit/architect';
 import {
   type BuilderOutput,
@@ -16,7 +15,9 @@ describe('Playwright builder', () => {
   beforeEach(async () => {
     const architectHost = new TestingArchitectHost();
     architect = new Architect(architectHost);
-    await architectHost.addBuilderFromPackage(join(__dirname, '../../..'));
+    // path relative to @angular-devkit
+    const packageRoot = '../../../..';
+    await architectHost.addBuilderFromPackage(packageRoot);
 
     // Builder that mocks `ng run app:serve`
     const fakeBuilder = (options: { port: number | null }): BuilderOutput => {
