@@ -1,6 +1,6 @@
 {
   "formatter": {
-    "ignore": ["package.json"],
+    "includes": ["**", "!package.json"],
     "indentStyle": "space"
   },
   "javascript": {
@@ -9,7 +9,7 @@
     }
   },
   "linter": {
-    "ignore": ["src/*/files/**/*"]
+    "includes": ["**", "!src/*/files/**/*"]
   },
   "vcs": {
     "enabled": true,

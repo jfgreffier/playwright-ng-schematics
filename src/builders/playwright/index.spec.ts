@@ -1,6 +1,6 @@
 import { spawn } from 'node:child_process';
-import { Architect } from '@angular-devkit/architect';
 import {
+  Architect,
   type BuilderOutput,
   createBuilder,
   targetFromTargetString,

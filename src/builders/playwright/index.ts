@@ -129,7 +129,7 @@ async function runE2E(
   options: PlaywrightBuilderOptions,
   context: BuilderContext,
 ): Promise<BuilderOutput> {
-  let server: BuilderRun | undefined = undefined;
+  let server: BuilderRun | undefined;
   let baseURL = '';
 
   try {

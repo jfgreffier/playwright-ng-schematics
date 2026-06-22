@@ -1,12 +1,12 @@
 import {
-  url,
-  type Rule,
-  type SchematicContext,
-  type Tree,
   apply,
   chain,
   mergeWith,
   move,
+  type Rule,
+  type SchematicContext,
+  type Tree,
+  url,
 } from '@angular-devkit/schematics';
 import {
   NodePackageInstallTask,

@@ -1,14 +1,14 @@
 import { strings } from '@angular-devkit/core';
 import {
-  url,
-  type Rule,
-  type SchematicContext,
-  type Tree,
   apply,
   applyTemplates,
   chain,
   mergeWith,
   move,
+  type Rule,
+  type SchematicContext,
+  type Tree,
+  url,
 } from '@angular-devkit/schematics';
 
 // You don't have to export the function as default. You can also have more than one rule factory
