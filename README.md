@@ -154,6 +154,11 @@ You can run a specific version of Angular CLI as bellow.
 npx @angular/cli@18 e2e
 ```
 
+npm publication is performed in CI. np is quite useful for everything else (bumping version, perform checks, prepare the release).
+```bash
+npx np --no-publish
+```
+
 ## License
 
 This project is licensed under an Apache-2.0 license.
