@@ -13,7 +13,10 @@ import {
   RunSchematicTask,
 } from '@angular-devkit/schematics/tasks';
 
-export default function ngAdd(options: { installBrowsers: boolean }): Rule {
+export default function ngAdd(options: {
+  installBrowsers: boolean;
+  component: boolean;
+}): Rule {
   return (tree: Tree, context: SchematicContext) => {
     const copyFiles = mergeWith(apply(url('./files'), [move('.')]));
     const rules = [
@@ -25,6 +28,12 @@ export default function ngAdd(options: { installBrowsers: boolean }): Rule {
     ];
     if (options.installBrowsers) {
       context.addTask(new RunSchematicTask('install-browsers', {}));
+    }
+    if (options.component) {
+      const copyComponentFiles = mergeWith(
+        apply(url('./component-files'), [move('.')]),
+      );
+      rules.push(copyComponentFiles);
     }
     return chain(rules)(tree, context);
   };

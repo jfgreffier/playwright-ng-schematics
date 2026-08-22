@@ -105,6 +105,20 @@ describe('ng-add', () => {
     );
   });
 
+  it('should add files for component testing when asked for', async () => {
+    global.fetch = jest.fn().mockResolvedValueOnce({ json: npmResponse });
+
+    const tree = await runner.runSchematic(
+      'ng-add',
+      { component: true },
+      appTree,
+    );
+
+    expect(tree.files).toContain('/playwright/gallery/index.html');
+    expect(tree.files).toContain('/playwright/gallery/main.ts');
+    expect(tree.files).toContain('/playwright-ct.config.ts');
+  });
+
   it(`should install latest if can't fetch version from npm`, async () => {
     global.fetch = jest.fn().mockRejectedValueOnce({});
 

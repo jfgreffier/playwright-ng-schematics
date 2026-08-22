@@ -8,6 +8,11 @@
       "type": "boolean",
       "default": false,
       "x-prompt": "Install Playwright browsers (can be done manually via 'npx playwright install')?"
+    },
+    "component": {
+      "type": "boolean",
+      "default": false,
+      "x-prompt": "Add Playwright component testing (experimental)?"
     }
   },
   "required": []

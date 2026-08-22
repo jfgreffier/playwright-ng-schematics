@@ -19,5 +19,8 @@
     "types": ["node", "jest"]
   },
   "include": ["src/**/*"],
-  "exclude": ["src/schematics/*/files/**/*"]
+  "exclude": [
+    "src/schematics/*/files/**/*",
+    "src/schematics/*/component-files/**/*"
+  ]
 }

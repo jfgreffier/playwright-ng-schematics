@@ -9,7 +9,7 @@
     }
   },
   "linter": {
-    "includes": ["**", "!src/**/files/**/*"]
+    "includes": ["**", "!src/**/files/**/*", "!src/**/component-files/**/*"]
   },
   "vcs": {
     "enabled": true,

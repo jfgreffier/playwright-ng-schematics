@@ -4,7 +4,7 @@
   "description": "Playwright Angular schematics",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "postbuild": "cpy \"src/**/*.json\" \"src/**/files/**/*\" lib",
+    "postbuild": "cpy \"src/**/*.json\" \"src/**/files/**/*\" \"src/**/component-files/**/*\" lib",
     "lint": "biome ci",
     "lint:fix": "biome check --write",
     "test": "jest",
