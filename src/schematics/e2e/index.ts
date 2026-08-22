@@ -21,7 +21,6 @@ export default function e2e(options: { name: string }): Rule {
         name: options.name,
         dasherize: strings.dasherize,
       }),
-      move('e2e'),
     ]);
 
     const rule = chain([mergeWith(templateSource)]);
