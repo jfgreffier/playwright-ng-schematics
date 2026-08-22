@@ -4,7 +4,6 @@ import {
   applyTemplates,
   chain,
   mergeWith,
-  move,
   type Rule,
   type SchematicContext,
   type Tree,

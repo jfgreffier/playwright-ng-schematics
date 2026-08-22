@@ -6,7 +6,7 @@ const collectionPath = 'lib/schematics/collection.json';
 describe('e2e', () => {
   it('should generate spec file', async () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
-    
+
     const tree = await runner.runSchematic(
       'e2e',
       { name: 'hello' },
