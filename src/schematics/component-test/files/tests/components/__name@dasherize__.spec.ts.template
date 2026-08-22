@@ -1,0 +1,7 @@
+import { test, expect } from '@playwright/test';
+
+test('renders <%= classify(name) %>', async ({ mount }) => {
+  const component = await mount('components/<%= dasherize(name) %>/Primary');
+
+  await expect(component).toBeVisible();
+});

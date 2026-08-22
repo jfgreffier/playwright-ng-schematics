@@ -14,6 +14,11 @@
       "description": "Creates a single test file",
       "factory": "./e2e/index",
       "schema": "./e2e/schema.json"
+    },
+    "component-test": {
+      "description": "Creates story and test files for an Angular component",
+      "factory": "./component-test/index",
+      "schema": "./component-test/schema.json"
     }
   }
 }

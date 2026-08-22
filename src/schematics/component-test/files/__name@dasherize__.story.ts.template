@@ -1,0 +1,10 @@
+import { Component } from '@angular/core';
+import { <%= classify(name) %> } from './<%= dasherize(name) %>.component';
+
+@Component({
+  selector: 'app-<%= dasherize(name) %>-primary',
+  standalone: true,
+  imports: [<%= classify(name) %>],
+  template: `<app-<%= dasherize(name) %>></app-<%= dasherize(name) %>>`,
+})
+export class Primary {}

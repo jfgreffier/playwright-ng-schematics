@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`component-test should generate story and component spec file 1`] = `
+"import { Component } from '@angular/core';
+import { Hello } from './hello.component';
+
+@Component({
+  selector: 'app-hello-primary',
+  standalone: true,
+  imports: [Hello],
+  template: \`<app-hello></app-hello>\`,
+})
+export class Primary {}
+"
+`;
+
+exports[`component-test should generate story and component spec file 2`] = `
+"import { test, expect } from '@playwright/test';
+
+test('renders Hello', async ({ mount }) => {
+  const component = await mount('components/hello/Primary');
+
+  await expect(component).toBeVisible();
+});
+"
+`;
