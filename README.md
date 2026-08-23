@@ -10,6 +10,7 @@ Adds [Playwright Test](https://playwright.dev/) to your Angular project
 - Set up `ng e2e` for you
 - Adds configuration to `angular.json` for easy integration into your existing project
 - `ng generate` e2e tests
+- Optionnaly set up component testing
 
 <img src="docs/playwright-schematics.gif" alt="demo of ng e2e installing Playwright, then running end-to-end tests" width="800"/>
 
@@ -23,6 +24,92 @@ ng add playwright-ng-schematics
 Once installed, you can run the tests
 ```bash
 npm run e2e
+```
+
+If you selected component testing at installation, you can run component tests as bellow
+```bash
+npx playwright test --config=playwright-ct.config.ts
+```
+
+## New: Component Testing
+
+As of Playwright 1.62, Component Testing is out of experimental and compatible with Angular !
+
+It works thanks to:
+- The component **gallery**, a single page application that serves stories. It is created by this schematic on component testing setup
+- A **story** is an example usage of your component. You can initialize it with default values, add test doubles...
+- Your actual **test** that uses the new `mount()` fixture and return a component. You can then make actions and assertions on `component` as you usually do with `page`
+
+> [!TIP]
+> If you use Playwright Test for VSCode and the option `Show browser`, you can see the actual render of your component and inspect it with the browser's DevTools. This way you can edit your component, write tests and see the impact in the browser.
+
+https://playwright.dev/docs/test-components
+
+### Example
+
+src/components/counter-button.component.ts
+```ts
+import { Component, Input } from '@angular/core';
+
+@Component({
+  selector: 'app-counterbutton',
+  standalone: true,
+  template: `<button type="button" (click)="increment()">Count is {{ count }}</button>`,
+})
+export class CounterButtonComponent {
+  @Input() count = 0;
+
+  increment(): void {
+    this.count += 1;
+  }
+}
+
+```
+
+src/components/counter-button.story.ts
+```ts
+import { Component, Input } from '@angular/core';
+
+import { CounterButtonComponent } from './counter-button.component';
+
+@Component({
+  selector: 'app-counterbutton-primary-story',
+  standalone: true,
+  imports: [CounterButtonComponent],
+  template: `<app-counterbutton [count]="count"></app-counterbutton>`,
+})
+export class Primary {
+  @Input() count = 0;
+}
+
+@Component({
+  selector: 'app-counterbutton-seven-story',
+  standalone: true,
+  imports: [CounterButtonComponent],
+  template: `<app-counterbutton [count]="count"></app-counterbutton>`,
+})
+export class Seven {
+  @Input() count = 7;
+}
+
+```
+
+tests/components/counter-button.spec.ts
+```ts
+import { test, expect } from '@playwright/test';
+
+test('renders primary button', async ({ mount }) => {
+  const component = await mount('components/counter-button/Primary');
+
+  await expect(component.getByRole('button')).toContainText('Count is');
+});
+
+test('button shows inital count', async ({ mount }) => {
+  const component = await mount('components/counter-button/Seven');
+
+  await expect(component.getByRole('button')).toHaveText('Count is 7');
+});
+
 ```
 
 ## Requirements
@@ -105,12 +192,22 @@ The example below shows projects using `PLAYWRIGHT_TEST_BASE_URL` (set by `devSe
 
 Create a new empty test
 ```bash
-ng generate e2e "<TestName>"
+ng generate e2e <test name>
 ```
 
-or with CLI prompt of the name
+or with CLI prompt for the file name
 ```bash
 ng generate e2e
+```
+
+To generate a new component story and test
+```bash
+ng generate component-test <component name>
+```
+
+or with CLI prompt for the component name
+```bash
+ng generate component-test
 ```
 
 ## Migrating from Protractor
