@@ -43,7 +43,7 @@ It works thanks to:
 > [!TIP]
 > If you use Playwright Test for VSCode and the option `Show browser`, you can see the actual render of your component and inspect it with the browser's DevTools. This way you can edit your component, write tests and see the impact in the browser.
 
-https://playwright.dev/docs/test-components
+Check the official documentation https://playwright.dev/docs/test-components
 
 ### Example
 

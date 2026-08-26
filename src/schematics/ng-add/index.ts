@@ -34,6 +34,8 @@ export default function ngAdd(options: {
         apply(url('./component-files'), [move('.')]),
       );
       rules.push(copyComponentFiles);
+      context.logger.info("\nGenerate story and component test with `ng generate component-test`");
+      context.logger.info("An example is available at https://github.com/jfgreffier/playwright-ng-schematics#new-component-testing\n");
     }
     return chain(rules)(tree, context);
   };

@@ -12,7 +12,7 @@
     "component": {
       "type": "boolean",
       "default": false,
-      "x-prompt": "Add Playwright component testing (experimental)?"
+      "x-prompt": "Add Playwright component testing?"
     }
   },
   "required": []
