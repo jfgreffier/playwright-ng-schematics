@@ -21,4 +21,19 @@ describe('component-test', () => {
       tree.readContent('/tests/components/hello.spec.ts'),
     ).toMatchSnapshot();
   });
+
+  it('should generate story next to an existing component file', async () => {
+    const runner = new SchematicTestRunner('schematics', collectionPath);
+    const appTree = Tree.empty();
+    appTree.create('/src/hello.component.ts', '');
+
+    const tree = await runner.runSchematic(
+      'component-test',
+      { name: 'hello' },
+      appTree,
+    );
+
+    expect(tree.files).toContain('/src/hello.component.ts');
+    expect(tree.files).toContain('/src/hello.story.ts');
+  });
 });
