@@ -7,7 +7,13 @@ import {
 } from '@angular-devkit/architect';
 import { TestingArchitectHost } from '@angular-devkit/architect/testing';
 
+const playwrightBin = '/project/node_modules/@playwright/test/cli.js';
 jest.mock('node:child_process');
+jest.mock('node:module', () => ({
+  createRequire: () => ({
+    resolve: () => playwrightBin,
+  }),
+}));
 
 describe('Playwright builder', () => {
   let architect: Architect;
@@ -45,8 +51,8 @@ describe('Playwright builder', () => {
 
     expect(output.success).toBeTruthy();
     expect(spawn).toHaveBeenCalledWith(
-      'npx playwright test',
-      [],
+      process.execPath,
+      [playwrightBin, 'test'],
       expect.anything(),
     );
   });
@@ -64,8 +70,8 @@ describe('Playwright builder', () => {
 
     expect(output.success).toBeTruthy();
     expect(spawn).toHaveBeenCalledWith(
-      'npx playwright test',
-      [],
+      process.execPath,
+      [playwrightBin, 'test'],
       expect.objectContaining({
         env: expect.objectContaining({
           PLAYWRIGHT_TEST_BASE_URL: 'https://example.com:0',
@@ -98,8 +104,8 @@ describe('Playwright builder', () => {
     const output = await run.result;
 
     expect(spawn).toHaveBeenCalledWith(
-      'npx playwright test',
-      ['--ui'],
+      process.execPath,
+      [playwrightBin, 'test', '--ui'],
       expect.anything(),
     );
     expect(output.success).toBeTruthy();
@@ -123,8 +129,19 @@ describe('Playwright builder', () => {
     const output = await run.result;
 
     expect(spawn).toHaveBeenCalledWith(
-      'npx playwright test',
-      ['--test1', 'testValue', '--test2', '2', '--test3', '-a', 'yes', '-b'],
+      process.execPath,
+      [
+        playwrightBin,
+        'test',
+        '--test1',
+        'testValue',
+        '--test2',
+        '2',
+        '--test3',
+        '-a',
+        'yes',
+        '-b',
+      ],
       expect.anything(),
     );
     expect(output.success).toBeTruthy();
@@ -142,8 +159,14 @@ describe('Playwright builder', () => {
     const output = await run.result;
 
     expect(spawn).toHaveBeenCalledWith(
-      'npx playwright test',
-      ['tests/todo-page/', 'tests/landing-page/', '--fail-on-flaky-tests'],
+      process.execPath,
+      [
+        playwrightBin,
+        'test',
+        'tests/todo-page/',
+        'tests/landing-page/',
+        '--fail-on-flaky-tests',
+      ],
       expect.anything(),
     );
     expect(output.success).toBeTruthy();
@@ -158,8 +181,8 @@ describe('Playwright builder', () => {
     const output = await run.result;
 
     expect(spawn).toHaveBeenCalledWith(
-      'npx playwright test',
-      ['--project', 'chromium'],
+      process.execPath,
+      [playwrightBin, 'test', '--project', 'chromium'],
       expect.anything(),
     );
     expect(output.success).toBeTruthy();
@@ -174,8 +197,8 @@ describe('Playwright builder', () => {
     const output = await run.result;
 
     expect(spawn).toHaveBeenCalledWith(
-      'npx playwright test',
-      ['--update-snapshots'],
+      process.execPath,
+      [playwrightBin, 'test', '--update-snapshots'],
       expect.anything(),
     );
     expect(output.success).toBeTruthy();

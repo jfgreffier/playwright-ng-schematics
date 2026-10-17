@@ -1,4 +1,6 @@
 import { spawn } from 'node:child_process';
+import { createRequire } from 'node:module';
+import { join } from 'node:path';
 import {
   type BuilderContext,
   type BuilderOutput,
@@ -75,17 +77,6 @@ async function startDevServer(
   return server;
 }
 
-export function getPackageManagerExecCommand() {
-  const env = process.env.npm_config_user_agent || '';
-  if (env.includes('yarn')) {
-    return 'yarn';
-  }
-  if (env.includes('pnpm')) {
-    return 'pnpm exec';
-  }
-  return 'npx';
-}
-
 async function startPlaywrightTest(options: JsonObject, baseURL: string) {
   // PLAYWRIGHT_TEST_BASE_URL is actually a non-documented env variable used
   // by Playwright Test.
@@ -99,23 +90,30 @@ async function startPlaywrightTest(options: JsonObject, baseURL: string) {
   }
 
   return new Promise((resolve, reject) => {
-    const childProcess = spawn(
-      `${getPackageManagerExecCommand()} playwright test`,
-      buildArgs(options),
-      {
-        cwd: process.cwd(),
-        stdio: 'inherit',
-        shell: true,
-        env,
-      },
-    );
+    try {
+      const projectRequire = createRequire(join(process.cwd(), 'package.json'));
+      const playwrightBin = projectRequire.resolve('@playwright/test/cli');
 
-    childProcess.on('exit', (exitCode) => {
-      if (exitCode !== 0) {
-        reject(exitCode);
-      }
-      resolve(true);
-    });
+      const childProcess = spawn(
+        process.execPath,
+        [playwrightBin, 'test', ...buildArgs(options)],
+        {
+          cwd: process.cwd(),
+          stdio: 'inherit',
+          env,
+        },
+      );
+
+      childProcess.on('exit', (exitCode) => {
+        if (exitCode !== 0) {
+          reject(exitCode);
+        }
+        resolve(true);
+      });
+    } catch (error) {
+      console.log('Could not find @playwright/test. Make sure it is installed');
+      reject(error);
+    }
   });
 }
 
