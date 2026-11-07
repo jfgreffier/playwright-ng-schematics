@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`component-test should generate story and component spec file 1`] = `
+exports[`component-test > should generate story and component spec file 1`] = `
 "import { Component } from '@angular/core';
 import { Hello } from './hello.component';
 
@@ -14,7 +14,7 @@ export class Primary {}
 "
 `;
 
-exports[`component-test should generate story and component spec file 2`] = `
+exports[`component-test > should generate story and component spec file 2`] = `
 "import { test, expect } from '@playwright/test';
 
 test('renders Hello', async ({ mount }) => {

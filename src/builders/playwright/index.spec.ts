@@ -1,4 +1,5 @@
-import { spawn } from 'node:child_process';
+import childProcess from 'node:child_process';
+import nodeModule from 'node:module';
 import {
   Architect,
   type BuilderOutput,
@@ -6,14 +7,13 @@ import {
   targetFromTargetString,
 } from '@angular-devkit/architect';
 import { TestingArchitectHost } from '@angular-devkit/architect/testing';
+import { type Mock, vi } from 'vitest';
 
 const playwrightBin = '/project/node_modules/@playwright/test/cli.js';
-jest.mock('node:child_process');
-jest.mock('node:module', () => ({
-  createRequire: () => ({
-    resolve: () => playwrightBin,
-  }),
-}));
+const spawn = vi.spyOn(childProcess, 'spawn').mockImplementation(vi.fn());
+vi.spyOn(nodeModule, 'createRequire').mockReturnValue({
+  resolve: () => playwrightBin,
+} as unknown as NodeJS.Require);
 
 describe('Playwright builder', () => {
   let architect: Architect;
@@ -32,13 +32,13 @@ describe('Playwright builder', () => {
     architectHost.addBuilder('fakeBuilder', createBuilder(fakeBuilder));
     architectHost.addTarget(targetFromTargetString('app:serve'), 'fakeBuilder');
 
-    (spawn as jest.Mock).mockReturnValue({
-      on: jest.fn((_event, callback) => callback(0)),
+    (spawn as Mock).mockReturnValue({
+      on: vi.fn((_event, callback) => callback(0)),
     });
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should spawn testing process', async () => {
@@ -81,8 +81,8 @@ describe('Playwright builder', () => {
   });
 
   it('should fail on error', async () => {
-    (spawn as jest.Mock).mockReturnValue({
-      on: jest.fn((_event, callback) => callback(-3)),
+    (spawn as Mock).mockReturnValue({
+      on: vi.fn((_event, callback) => callback(-3)),
     });
 
     const run = await architect.scheduleBuilder(

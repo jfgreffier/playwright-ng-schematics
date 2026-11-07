@@ -16,7 +16,7 @@
     "sourceMap": false,
     "strictNullChecks": true,
     "target": "es6",
-    "types": ["node", "jest"]
+    "types": ["node", "vitest/globals"]
   },
   "include": ["src/**/*"],
   "exclude": [

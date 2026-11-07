@@ -3,12 +3,13 @@ import {
   SchematicTestRunner,
   type UnitTestTree,
 } from '@angular-devkit/schematics/testing';
+import { vi } from 'vitest';
 
 const collectionPath = 'lib/schematics/collection.json';
 
 describe('ng-add', () => {
   const runner = new SchematicTestRunner('schematics', collectionPath);
-  const npmResponse = jest
+  const npmResponse = vi
     .fn()
     .mockResolvedValue({ 'dist-tags': { latest: '1.2.3' } });
   let appTree: UnitTestTree;
@@ -26,7 +27,7 @@ describe('ng-add', () => {
   });
 
   it('should add "e2e" to angular', async () => {
-    global.fetch = jest.fn().mockResolvedValueOnce({ json: npmResponse });
+    global.fetch = vi.fn().mockResolvedValueOnce({ json: npmResponse });
 
     const tree = await runner.runSchematic('ng-add', {}, appTree);
 
@@ -37,7 +38,7 @@ describe('ng-add', () => {
   });
 
   it('should add "playwright-ng-schematics" to schematicCollections', async () => {
-    global.fetch = jest.fn().mockResolvedValueOnce({ json: npmResponse });
+    global.fetch = vi.fn().mockResolvedValueOnce({ json: npmResponse });
 
     const tree = await runner.runSchematic('ng-add', {}, appTree);
 
@@ -49,7 +50,7 @@ describe('ng-add', () => {
   });
 
   it('should not overwrite existing schematicCollections', async () => {
-    global.fetch = jest.fn().mockResolvedValueOnce({ json: npmResponse });
+    global.fetch = vi.fn().mockResolvedValueOnce({ json: npmResponse });
     const angularJson = appTree.readJson('/angular.json') as JsonObject;
     appTree.overwrite(
       './angular.json',
@@ -71,7 +72,7 @@ describe('ng-add', () => {
   });
 
   it('should add npm script', async () => {
-    global.fetch = jest.fn().mockResolvedValueOnce({ json: npmResponse });
+    global.fetch = vi.fn().mockResolvedValueOnce({ json: npmResponse });
 
     const tree = await runner.runSchematic('ng-add', {}, appTree);
 
@@ -80,7 +81,7 @@ describe('ng-add', () => {
   });
 
   it('should update .gitignore', async () => {
-    global.fetch = jest.fn().mockResolvedValueOnce({ json: npmResponse });
+    global.fetch = vi.fn().mockResolvedValueOnce({ json: npmResponse });
 
     const tree = await runner.runSchematic('ng-add', {}, appTree);
 
@@ -89,7 +90,7 @@ describe('ng-add', () => {
   });
 
   it('should add files and update devDependencies', async () => {
-    global.fetch = jest.fn().mockResolvedValueOnce({ json: npmResponse });
+    global.fetch = vi.fn().mockResolvedValueOnce({ json: npmResponse });
 
     const tree = await runner.runSchematic('ng-add', {}, appTree);
 
@@ -106,7 +107,7 @@ describe('ng-add', () => {
   });
 
   it('should add files for component testing when asked for', async () => {
-    global.fetch = jest.fn().mockResolvedValueOnce({ json: npmResponse });
+    global.fetch = vi.fn().mockResolvedValueOnce({ json: npmResponse });
 
     const tree = await runner.runSchematic(
       'ng-add',
@@ -120,7 +121,7 @@ describe('ng-add', () => {
   });
 
   it(`should install latest if can't fetch version from npm`, async () => {
-    global.fetch = jest.fn().mockRejectedValueOnce({});
+    global.fetch = vi.fn().mockRejectedValueOnce({});
 
     const tree = await runner.runSchematic('ng-add', {}, appTree);
 

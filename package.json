@@ -7,8 +7,8 @@
     "postbuild": "cpy \"src/**/*.json\" \"src/**/files/**/*\" \"src/**/component-files/**/*\" lib",
     "lint": "biome ci",
     "lint:fix": "biome check --write",
-    "test": "jest",
-    "test:ci": "jest --runInBand"
+    "test": "vitest run",
+    "test:ci": "vitest run"
   },
   "files": [
     "lib",
@@ -34,13 +34,11 @@
   "devDependencies": {
     "@biomejs/biome": "^2.5.0",
     "@schematics/angular": "^22.0.0",
-    "@types/jest": "^30.0.0",
     "@types/node": "^22.20.0",
     "cpy-cli": "^7.0.0",
-    "jest": "^30.4.2",
-    "ts-jest": "^29.4.11",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^5.1.0"
   },
   "peerDependencies": {
     "@angular-devkit/architect": ">= 0.2200.0 < 0.2300.0",
